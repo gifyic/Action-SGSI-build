@@ -109,7 +109,7 @@ jobs:
       - name: Upload gof
         run: |
           curl -sL https://git.io/file-transfer | sh
-          "./transfer --no-progress gof $GITHUB_WORKSPACE/Tool-SGSI-build/upload_ab/* | grep Download Link:" >> $GITHUB_WORKSPACE/Tool-SGSI-build/SGSI/build_info.txt
+          ./transfer --no-progress gof $GITHUB_WORKSPACE/Tool-SGSI-build/upload_ab/AB_${{ github.event.inputs.REPACK_NAME }} 
       
       - name: Release...
         uses: ncipollo/release-action@v1.8.0
