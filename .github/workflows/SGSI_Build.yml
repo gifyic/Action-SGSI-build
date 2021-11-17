@@ -106,39 +106,7 @@ jobs:
           ls upload_ab
           echo "--------------------------------------"
 
-      - name: Make A-only type GSI‌‌...
-        if: ${{ github.event.inputs.SGSI_TYPE }} == 'A' || ${{ github.event.inputs.SGSI_TYPE }} == 'BOTH'
+      - name: Upload gof
         run: |
-          sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh A << EOF
-          ${{ github.event.inputs.ZIP_NAME }}
-          y
-          y
-          ${{ github.event.inputs.OS_TYPE }}
-          y
-
-      - name: Packing(A-only)...
-        if: ${{ github.event.inputs.SGSI_TYPE }} == 'A' || ${{ github.event.inputs.SGSI_TYPE }} == 'BOTH'
-        run: |
-          cd $GITHUB_WORKSPACE/Tool-SGSI-build
-          pwd
-          zip -r AONLY_${{ github.event.inputs.REPACK_NAME }} SGSI/*
-          ls "AONLY_${{ github.event.inputs.REPACK_NAME }}"
-          echo "--------------------------------------"
-          ls
-          echo "--------------------------------------"
-          mkdir upload_aonly
-          echo "--------------------------------------"
-          ls upload_aonly
-          echo "--------------------------------------"
-          if [ $(ls -l AONLY_${{ github.event.inputs.REPACK_NAME }} | awk '{print $5}') -gt 2147483647 ]; then tar cvzpf - AONLY_${{ github.event.inputs.REPACK_NAME }} | split -d -b 1024m - upload_aonly/AONLY_${{ github.event.inputs.REPACK_NAME }}; else mv AONLY_${{ github.event.inputs.REPACK_NAME }} upload_aonly/AONLY_${{ github.event.inputs.REPACK_NAME }}; fi
-          echo "--------------------------------------"
-          ls upload_aonly
-          echo "--------------------------------------"
-
-      - name: Upload to Release‌‌...
-        uses: ncipollo/release-action@v1.8.0
-        with:
-          artifacts: "${{ github.workspace }}/Tool-SGSI-build/upload_ab/*,${{ github.workspace }}/Tool-SGSI-build/upload_aonly/*"
-          tag: "${{ github.event.inputs.REPACK_NAME }}_${{ env.BUILD_TIME }}"
-          bodyFile: "${{ github.workspace }}/Tool-SGSI-build/SGSI/build_info.txt"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          curl -sL https://git.io/file-transfer | sh
+          ./transfer --no-progress gof $GITHUB_WORKSPACE/Tool-SGSI-build/upload_ab/*
